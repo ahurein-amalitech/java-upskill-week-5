@@ -9,6 +9,7 @@ import org.example.student_management.entity.Role;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserReadDto {
+    private int id;
     private String email;
     private String firstName;
     private String lastName;

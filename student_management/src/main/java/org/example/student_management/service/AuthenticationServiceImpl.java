@@ -9,6 +9,7 @@ import org.example.student_management.dto.SignInDto;
 import org.example.student_management.dto.SuccessfulLoginResponseDto;
 import org.example.student_management.entity.Role;
 import org.example.student_management.entity.User;
+import org.example.student_management.exceptions.AlreadyExistException;
 import org.example.student_management.exceptions.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,15 +27,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public SuccessfulLoginResponseDto register(CreateUserDto request) {
-        var userExist = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException());
+        var userExist = repository.findByEmail(request.getEmail());
+        if(userExist.isPresent()) throw new AlreadyExistException("User exist already");
 
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.User)
+                .role(request.getRole())
                 .build();
 
         repository.save(user);
