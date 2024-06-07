@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.example.student_management.contract.JwtService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,8 @@ import java.util.function.Function;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-    private final static String SECRET_KEY = "cyb9eDTQmPMSrab/LE5mJSED8TwmyEAgOjV8lHLHLbTPpPcUNsqO9wnD+RUqKxyk";
+    @Value("${jwt.secret_key}")
+    private String SECRET_KEY;
 
     @Override
     public String extractUsername(String token) {
